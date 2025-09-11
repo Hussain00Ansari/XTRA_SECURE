@@ -23,7 +23,8 @@ It integrates two `.pkl` models into a single FastAPI backend and provides a mod
 ---
 
 ## 🗂️ Project Structure  
-'''XTRA_SECURE/
+```
+XTRA_SECURE/
 │
 ├── frontend/ # React frontend
 │ ├── public/
@@ -37,7 +38,8 @@ It integrates two `.pkl` models into a single FastAPI backend and provides a mod
 │ ├── requirements.txt
 │ └── pycache/
 │
-└── README.md'''
+└── README.md
+```
 
 ---
 
