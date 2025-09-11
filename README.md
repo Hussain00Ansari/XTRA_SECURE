@@ -15,10 +15,9 @@ It integrates two `.pkl` models into a single FastAPI backend and provides a mod
 
 ---
 
-## 🌐 Live Demo  
+## 🌐 Live Website
 
-- **Frontend (Netlify):** [https://xtra-secure-frontend.netlify.app](https://xtra-secure-frontend.netlify.app)  
-- **Backend API (Render):** [https://xtra-secure-backend.onrender.com](https://xtra-secure-backend.onrender.com)   
+- **URL** https://xtra-secure.netlify.app/
 
 ---
 
