@@ -8,5 +8,4 @@ lightgbm==3.3.5
 joblib==1.4.2
 python-multipart==0.0.9
 lief==0.12.3
-numpy==1.24.4
 git+https://github.com/elastic/ember.git
