@@ -1,11 +1,12 @@
 fastapi==0.115.0
 uvicorn==0.30.6
 tqdm==4.66.5
-scikit-learn==1.6.1
-numpy==1.26.4
-pandas==2.2.2
+scikit-learn==1.2.2
+numpy==2.3.2
+pandas==1.5.3
 lightgbm==3.3.5
 joblib==1.4.2
 python-multipart==0.0.9
 lief==0.12.3
 git+https://github.com/elastic/ember.git
+requests==2.32.3
