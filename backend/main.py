@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import numpy as np
+import os
+import requests
 from ember import PEFeatureExtractor  # ✅ EMBER feature extractor
 
 app = FastAPI()
@@ -16,14 +18,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load models
+# -------- Utility: download if not exists --------
+def download_model(url, filename):
+    if not os.path.exists(filename):
+        print(f"Downloading {filename}...")
+        r = requests.get(url)
+        r.raise_for_status()
+        with open(filename, "wb") as f:
+            f.write(r.content)
+
+# -------- Download models from GitHub Release (or any host) --------
+download_model(
+    "https://github.com/<YOUR_USER>/<YOUR_REPO>/releases/download/v1.0/model.pkl",
+    "model.pkl"
+)
+download_model(
+    "https://github.com/<YOUR_USER>/<YOUR_REPO>/releases/download/v1.0/malware_model_cpu.pkl",
+    "malware_model_cpu.pkl"
+)
+
+# -------- Load models --------
 phishing_model = joblib.load("model.pkl")
 malware_model = joblib.load("malware_model_cpu.pkl")
 
-# Initialize EMBER extractor once
+# -------- Initialize EMBER extractor once --------
 extractor = PEFeatureExtractor(feature_version=2)
 
-# Request body for email text
+# -------- Request body for email text --------
 class EmailRequest(BaseModel):
     text: str
 
