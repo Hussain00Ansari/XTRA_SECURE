@@ -3,3 +3,4 @@ uvicorn==0.30.6
 joblib==1.5.2
 scikit-learn==1.6.1
 python-multipart==0.0.9
+ember
