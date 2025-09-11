@@ -9,4 +9,4 @@ joblib==1.4.2
 python-multipart==0.0.9
 lief==0.12.3
 git+https://github.com/elastic/ember.git
-requests==2.32.3
+huggingface_hub==0.24.6

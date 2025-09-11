@@ -3,9 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import numpy as np
-import os
-import requests
-from ember import PEFeatureExtractor  # ✅ EMBER feature extractor
+from ember import PEFeatureExtractor
+from huggingface_hub import hf_hub_download  # ✅ Import Hugging Face downloader
 
 app = FastAPI()
 
@@ -18,33 +17,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -------- Utility: download if not exists --------
-def download_model(url, filename):
-    if not os.path.exists(filename):
-        print(f"Downloading {filename}...")
-        r = requests.get(url)
-        r.raise_for_status()
-        with open(filename, "wb") as f:
-            f.write(r.content)
+# ✅ Download models from Hugging Face instead of local files
+phishing_model_path = hf_hub_download("Anindya-Dev/xtra-secure-models", "model.pkl")
+malware_model_path = hf_hub_download("Anindya-Dev/xtra-secure-models", "malware_model_cpu.pkl")
 
-# -------- Download models from GitHub Release (or any host) --------
-download_model(
-    "https://github.com/Hussain00Ansari/XTRA_SECURE/releases/download/v1.0/model.pkl",
-    "model.pkl"
-)
-download_model(
-    "https://github.com/Hussain00Ansari/XTRA_SECURE/releases/download/v1.0/malware_model_cpu.pkl",
-    "malware_model_cpu.pkl"
-)
+phishing_model = joblib.load(phishing_model_path)
+malware_model = joblib.load(malware_model_path)
 
-# -------- Load models --------
-phishing_model = joblib.load("model.pkl")
-malware_model = joblib.load("malware_model_cpu.pkl")
-
-# -------- Initialize EMBER extractor once --------
+# Initialize EMBER extractor once
 extractor = PEFeatureExtractor(feature_version=2)
 
-# -------- Request body for email text --------
+# Request body for email text
 class EmailRequest(BaseModel):
     text: str
 
@@ -83,7 +66,6 @@ async def predict_email_file(file: UploadFile = File(...)):
 async def predict_malware(file: UploadFile = File(...)):
     content = await file.read()
 
-    # ✅ 1. Must be a PE file
     if not content.startswith(b"MZ"):
         return {
             "verdict": "Unsupported file type",
@@ -92,11 +74,9 @@ async def predict_malware(file: UploadFile = File(...)):
         }
 
     try:
-        # ✅ 2. Extract features
         features = extractor.feature_vector(content)
         features = np.array(features).reshape(1, -1)
 
-        # ✅ 3. Predict
         pred = malware_model.predict(features)[0]
         prob = malware_model.predict_proba(features)[0].max()
 
