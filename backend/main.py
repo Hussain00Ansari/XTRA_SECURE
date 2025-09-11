@@ -11,11 +11,15 @@ app = FastAPI()
 # Allow frontend (localhost:5173) to call backend (localhost:8080)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # ✅ only your frontend
+    allow_origins=[
+        "http://localhost:5173",        # ✅ local development
+        "https://xtra-secure.netlify.app"  # ✅ deployed frontend
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # ✅ Download models from Hugging Face instead of local files
 phishing_model_path = hf_hub_download("Anindya-Dev/xtra-secure-models", "model.pkl")
@@ -26,6 +30,19 @@ malware_model = joblib.load(malware_model_path)
 
 # Initialize EMBER extractor once
 extractor = PEFeatureExtractor(feature_version=2)
+
+# Root route (so / doesn’t return 404)
+@app.get("/")
+async def root():
+    return {
+        "message": "🚀 XTRA Secure API is live!",
+        "docs": "/docs",
+        "endpoints": [
+            "/predict_email_text",
+            "/predict_email_file",
+            "/predict_malware"
+        ]
+    }
 
 # Request body for email text
 class EmailRequest(BaseModel):
