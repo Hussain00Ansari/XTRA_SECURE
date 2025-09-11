@@ -29,11 +29,11 @@ def download_model(url, filename):
 
 # -------- Download models from GitHub Release (or any host) --------
 download_model(
-    "https://github.com/<YOUR_USER>/<YOUR_REPO>/releases/download/v1.0/model.pkl",
+    "https://github.com/Hussain00Ansari/XTRA_SECURE/releases/download/v1.0/model.pkl",
     "model.pkl"
 )
 download_model(
-    "https://github.com/<YOUR_USER>/<YOUR_REPO>/releases/download/v1.0/malware_model_cpu.pkl",
+    "https://github.com/Hussain00Ansari/XTRA_SECURE/releases/download/v1.0/malware_model_cpu.pkl",
     "malware_model_cpu.pkl"
 )
 
